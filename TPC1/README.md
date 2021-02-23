@@ -7,7 +7,5 @@
 
 Requisitos mínimos para o dataset:
     - 4 UCs;
-
     - 4 docentes;
-
     - 200 alunos.
