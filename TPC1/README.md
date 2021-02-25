@@ -5,7 +5,7 @@
 3. Verificar se	o sistema consegue [inferir](uc-con-inf.ttl):
     * Quais os professores e alunos que ensinam e frequentam uma determinada unidade curricular, respectivamente;
     * Quais as unidades curriculares que um professor ensina bem como quais são os seus alunos;
-    * Por fim deduzir quais são os professores dos alunos;
+    * Quais são os professores dos alunos;
 
 Requisitos mínimos para o dataset:
 - 4 UCs;
