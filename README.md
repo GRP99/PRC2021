@@ -6,4 +6,5 @@
 
 <b> Trabalhos Semanais </b>
   * [T1](TPC1) - Gerar um dataset em TTL ;
+  * [T2](TPC2) - Povoamento de uma Ontologia utilizando XSLT ;
 - - - -
