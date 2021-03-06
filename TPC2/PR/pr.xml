@@ -58,7 +58,7 @@
     <deliverables>
         <link url="../arquivo-musica-digital.xml">Dataset utilizado;</link>
         <link url="../amd.dtd">Ficheiro DTD gerado de forma a conhecer a estrutura do dataset utilizado;</link>
-        <link url="../xslt2ttl.xsl">Ficheiro XSLT que efetua a conversão;</link>
+        <link url="../xml2ttl.xsl">Ficheiro XSLT que efetua a conversão;</link>
         <link url="../amd-gerado.txt">Ficheiro gerado pelo ficheiro XSLT;</link>
         <link url="../amd-base.ttl">Ontologia base criada;</link>
         <link url="../amd.ttl">Ontologia com todos os indivíduos gerados;</link>
