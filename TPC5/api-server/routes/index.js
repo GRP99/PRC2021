@@ -242,12 +242,12 @@ router.post('/authors', function (req, res, next) {
     }
 });
 
-router.delete('/pubs', function (req, res, next) {});
+router.delete('/pubs/:id', function (req, res, next) {});
 
-router.delete('/authors', function (req, res, next) {});
+router.delete('/authors/:id', function (req, res, next) {});
 
-router.put('/pubs', function (req, res, next) {});
+router.put('/pubs/:id', function (req, res, next) {});
 
-router.put('/authors', function (req, res, next) {});
+router.put('/authors/:id', function (req, res, next) {});
 
 module.exports = router;
