@@ -148,6 +148,7 @@ router.get('/authors/:id', function (req, res, next) {
     });
 });
 
+// Não funciona -> Erro obtido > MALFORMED QUERY: Encountered " "insert" "INSERT "" at line 7, column 1. Was expecting one of: "base" ... "prefix" ... "select" ... "construct" ... "describe" ... "ask" ... <
 router.post('/pubs', function (req, res, next) {
     if (req.body.type && req.body.id && req.body.title) {
         var query = 'INSERT DATA {\n:' + req.body.id + ' rdf:type owl:NamedIndividual ,\n';
@@ -210,7 +211,7 @@ router.post('/pubs', function (req, res, next) {
         query += ".\n}"
         console.log(query)
         var encoded = encodeURIComponent(prefixes + query);
-        axios.post(getLink + encoded).then(dados => {
+        axios.get(getLink + encoded).then(dados => {
             res.status(200).jsonp(dados.data.results);
         }).catch(err => {
             res.status(500).jsonp(err);
@@ -221,6 +222,7 @@ router.post('/pubs', function (req, res, next) {
 
 });
 
+// Não funciona -> Erro obtido > MALFORMED QUERY: Encountered " "insert" "INSERT "" at line 7, column 1. Was expecting one of: "base" ... "prefix" ... "select" ... "construct" ... "describe" ... "ask" ... <
 router.post('/authors', function (req, res, next) {
     if (req.body.name && req.body.id) {
 
