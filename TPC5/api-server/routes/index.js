@@ -13,6 +13,7 @@ var prefixes = ` PREFIX owl: <http://www.w3.org/2002/07/owl#>
 
 // Ver id repositório através do seguinte link http://epl.di.uminho.pt:8738/api/rdf4j/management/listRepos
 var getLink = "http://epl.di.uminho.pt:8738/api/rdf4j/query/A83732-TP5?query=";
+var getLinkUpdate = "http://epl.di.uminho.pt:8738/api/rdf4j/update/A83732-TP5";
 
 router.get('/pubs', function (req, res, next) {
     if (!(req.query.type)) {
@@ -148,7 +149,10 @@ router.get('/authors/:id', function (req, res, next) {
     });
 });
 
-// Não funciona -> Erro obtido > MALFORMED QUERY: Encountered " "insert" "INSERT "" at line 7, column 1. Was expecting one of: "base" ... "prefix" ... "select" ... "construct" ... "describe" ... "ask" ... <
+// Erro : Request failed with status code 415 
+// Nao sei qual o tipo que ele quer no post, nao funciona nem com json nem com x-www-form-urlencoded
+// Codigo = https://github.com/Tibblue/Open-Web-Ontobud/blob/36ac9c78eb45facc00aafdaeef44439bedcfc1b7/backend/routes/api/rdf4j/query.js
+// HELP PLEASE ??
 router.post('/pubs', function (req, res, next) {
     if (req.body.type && req.body.id && req.body.title) {
         var query = 'INSERT DATA {\n:' + req.body.id + ' rdf:type owl:NamedIndividual ,\n';
@@ -211,32 +215,54 @@ router.post('/pubs', function (req, res, next) {
         query += ".\n}"
         console.log(query)
         var encoded = encodeURIComponent(prefixes + query);
-        axios.get(getLink + encoded).then(dados => {
-            res.status(200).jsonp(dados.data.results);
+
+        axios({
+            method: 'post',
+            url: getLinkUpdate,
+            headers: {
+                "Accept": "application/x-www-form-urlencoded",
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            data: {
+               query: encoded,
+            }
+        }).then(resp => {
+            res.status(200).jsonp(resp);
         }).catch(err => {
             res.status(500).jsonp(err);
         });
+
     } else {
         res.status(500).jsonp({error: "ERROR: Check that you have at least the id, the type of the bibliography and if it has a title !!!"});
     }
 
 });
 
-// Não funciona -> Erro obtido > MALFORMED QUERY: Encountered " "insert" "INSERT "" at line 7, column 1. Was expecting one of: "base" ... "prefix" ... "select" ... "construct" ... "describe" ... "ask" ... <
+// Erro : Request failed with status code 415 
+// Nao sei qual o tipo que ele quer no post, nao funciona nem com json nem com x-www-form-urlencoded
+// Codigo = https://github.com/Tibblue/Open-Web-Ontobud/blob/36ac9c78eb45facc00aafdaeef44439bedcfc1b7/backend/routes/api/rdf4j/query.js
+// HELP PLEASE ??
 router.post('/authors', function (req, res, next) {
     if (req.body.name && req.body.id) {
+        var queryinsert = 'INSERT DATA { :' + req.body.id + ' rdf:type owl:NamedIndividual . :' + req.body.id + ' rdf:type :Author . :' + req.body.id + ' :nome \"' + req.body.name + '\" .}';
+        
+        var encoded = encodeURIComponent(prefixes + queryinsert);
 
-        var query = 'INSERT DATA { :' + req.body.id + ' rdf:type owl:NamedIndividual . :' + req.body.id + ' rdf:type :Author . :' + req.body.id + ' :nome \"' + req.body.name + '\" .}';
-
-        console.log(query)
-
-        var encoded = encodeURIComponent(prefixes + query);
-
-        axios.get(getLink + encoded).then(dados => {
-            res.status(200).jsonp(dados.dados);
+        axios({
+            method: 'post',
+            url: getLinkUpdate,
+            headers: {
+                "Accept": "application/json",
+                'Content-Type': 'application/json'
+            },
+            data: {
+               query: encoded,
+            }
+        }).then(resp => {
+            res.status(200).jsonp(resp);
         }).catch(err => {
             res.status(500).jsonp(err);
-        });
+        })
     } else {
         res.status(500).jsonp({error: "ERROR: Check that you have at least the id and if it has a name !!!"});
     }
