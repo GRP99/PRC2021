@@ -1,0 +1,49 @@
+Sobre a ontologia criada, especifica queries SPARQL que respondam às seguintes questões:
+
+	1. Que entidades (receitas e despesas) estão referenciadas na ontologia?
+		PREFIX : <http://www.di.uminho.pt/prc2021/afericao#>
+
+		SELECT ?s ?descricao WHERE {
+			?s a :Livro .
+    			?s :descrição ?descricao
+		}
+
+	2. Que frações não pagaram o mês de Abril de 2020?
+		PREFIX : <http://www.di.uminho.pt/prc2021/afericao#>
+
+		SELECT ?s ?descricao WHERE { 
+			?s a :Fração .
+    		?s :descrição ?descricao .
+    		MINUS {
+        		?s :pagamento :Abr.
+    		}
+		}
+
+	3. Para as despesas, qual o montante por entidade já dispendido?
+		PREFIX : <http://www.di.uminho.pt/prc2021/afericao#>
+
+		SELECT ?fornecedor (SUM(?valor) AS ?montante) WHERE { 
+			?s a :Despesas .
+    		?s :valor ?valor .
+    		?fornecedor :originaDespesa ?s .
+		} GROUP BY ?fornecedor
+
+	4. Qual a receita líquida que se pode concluir do mapa de pagamento (contando apenas as mensalidades pagas)?
+		PREFIX : <http://www.di.uminho.pt/prc2021/afericao#>
+		PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+		SELECT (SUM(?valor) as ?total) WHERE { 
+    		SELECT ?s ((xsd:integer(COUNT(?mes)) * xsd:integer(?mensalidade)) AS ?valor) WHERE { 
+        		?s a :Fração . 
+        		?s :mensalidade ?mensalidade . 
+        		?s :pagamento ?mes . 
+    		} GROUP BY ?s ?mensalidade }
+
+	5. Do mapa de pagamento, qual o montante pago por cada uma das frações?
+		PREFIX : <http://www.di.uminho.pt/prc2021/afericao#>
+		PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+		SELECT ?s ((xsd:integer(COUNT(?meses)) * xsd:integer(?mensalidade)) AS ?valor) WHERE { 
+	   		?s a :Fração . 
+    			?s :mensalidade ?mensalidade . 
+    			?s :pagamento ?meses . 
+		} GROUP BY ?s ?mensalidade
